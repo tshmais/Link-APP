@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="DriverProvider" class="jo.aspire.mobile.automationUtil.DriverProvider" >
+	</bean>
+	
+	<bean id="SessionHandler" class="jo.aspire.mobile.automationUtil.SauceLabeSessionHandler">
+	<constructor-arg ref="DriverProvider"/>
+	</bean>
+	<bean id="LoginSteps"
+		class="aspire.mobile.automation.steps.LoginSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+		<bean id="StoriesLifeCycle"
+		class="aspire.mobile.automation.steps.StoriesLifeCycle">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	<bean id="BaseSteps"
+		class="aspire.mobile.automation.steps.BaseSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	<bean id="RegistrationSteps"
+		class="aspire.mobile.automation.steps.RegistrationSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	
+</beans>
