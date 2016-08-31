@@ -6,9 +6,11 @@ import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import jo.aspire.generic.EnvirommentManager;
 import jo.aspire.mobile.automationUtil.DriverProvider;
+import jo.aspire.mobile.automationUtil.TargetPlatform;
 
 import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.annotations.AfterStories;
@@ -16,8 +18,11 @@ import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStories;
 import org.jbehave.core.annotations.BeforeStory;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.aspire.automationReport.AspireReport;
+import com.aspire.automationReport.MetaStoryInfo;
+import com.aspire.automationReport.StoriesStatusCounter;
 
 
 
@@ -46,6 +51,7 @@ public class StoriesLifeCycle {
 		  
 		  DriverProvider.initializePortsAndUUIDs();
 		for (int i = 0; i < DriverProvider.appiumPortsList.size(); i++) {
+			
 			Service = AppiumDriverLocalService
 					.buildService(new AppiumServiceBuilder()
 							.usingDriverExecutable(
@@ -56,25 +62,51 @@ public class StoriesLifeCycle {
 							.withArgument(GeneralServerFlag.SESSION_OVERRIDE));
 			Service.start();
 		}
-//try {
-//	Thread.sleep(10000);
-//} catch (InterruptedException e) {
-//	// TODO Auto-generated catch block
-//	e.printStackTrace();
-//}
+
 	}
 
 	
 	@AfterStory
 	public void runAfterStory() {
-	try {
-			driverProvider.closeCurrentDriver();
+		
+			try {
+				driverProvider.closeCurrentDriver();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			AspireReport.getInstance().setCurrentStoryEndDate();
 			AspireReport.getInstance().printEveryThing();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	        try {
+	        	
+	        	
+	        	String environment = "";
+				if (TargetPlatform.platformName.equals("Android")) {
+					environment = "Link APP - Android";
+				} else {
+					environment = "Link APP - iOS";
+				}
+	        	  StoriesStatusCounter counter =  AspireReport.getInstance().getReportDataManager().getTestCounters();
+	              int passedTestCount = counter.getPassed();
+	              int failedTestCount = counter.getFailed();
+	              int skippedTestCount = counter.getSkipped();
+	              int totalTestCount = passedTestCount + failedTestCount + skippedTestCount;
+	     	     PrintWriter writer = new PrintWriter(AspireReport.getInstance().getReportDataManager().getReportPath() + File.separator + "High_Level_Results.txt", "UTF-8");
+	     	   
+	     	     String HighLevelResults = "  - Number of test cases ran: "+totalTestCount+ "<br/>" + "<font color='green'>  - Number of test cases passed: </font>" +passedTestCount+ "<br/>" + "<font color='red'>  - Number of test cases failed: </font>" +failedTestCount + "<br/>" + "<font color='blue'>  - Number of test cases skipped: </font>" + skippedTestCount + "<br/>";
+	     	     for(String key : AspireReport.getInstance().getReportDataManager().getTestCounters().getMetaInfo().keySet()){
+	     	    	MetaStoryInfo metaInfo = AspireReport.getInstance().getReportDataManager().getTestCounters().getMetaInfo().get(key);
+	     	    	HighLevelResults = HighLevelResults + "<font color='green'>  - Number of " + key + " test cases passed: </font>" + metaInfo.getPassedCount() + "<br/>" + "<font color='red'>  - Number of " + key + " test cases failed: </font>" + metaInfo.getFailedCount()+ "<br/>";
+	     	     }
+	     	     
+	     	     String email_body = "Hi Team,"+ "<br/>" + "<br/>" +"Please see attached test results"+ "<br/>" + "<br/>" +environment+ "<br/>" + "<br/>"+"<b> High Level Results</b>" + "<br/>" + HighLevelResults + "<br/>" + "<br/>" +"Thanks,"+ "<br/>" +"QA Team";
+	     	     writer.println("email_body = " + email_body);
+	     	     writer.close();
+	           
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 	
 	@BeforeStories
 	
@@ -91,6 +123,8 @@ public class StoriesLifeCycle {
 			startServer();
     
 		//Service.start();
+		}else{
+			  DriverProvider.initializePortsAndUUIDs();
 		}
           
     }

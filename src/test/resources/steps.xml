@@ -27,4 +27,24 @@
 		 <constructor-arg ref="DriverProvider"/>
 	</bean>
 	
+	<bean id="ViewingOwnerProfileSteps"
+		class="aspire.mobile.automation.steps.ViewingOwnerProfileSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	
+	<bean id="FindCollarSteps"
+		class="aspire.mobile.automation.steps.FindCollarSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	
+	<bean id="ProfileSetupSteps"
+		class="aspire.mobile.automation.steps.ProfileSetupSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	
+	<bean id="BreedInformationSteps"
+		class="aspire.mobile.automation.steps.BreedInformationSteps">
+		 <constructor-arg ref="DriverProvider"/>
+	</bean>
+	
 </beans>

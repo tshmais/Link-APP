@@ -93,7 +93,7 @@ public class LoginPage extends Helper implements ILoginPage {
 	}
 
 	public void displayMessage() {
-		wait(for_find("Incorrect email and/or password"));
+		wait(for_find("Please enter a valid email address"));
 		
 	}
 
@@ -170,6 +170,30 @@ public class LoginPage extends Helper implements ILoginPage {
 
 
 	public void welcomeView() {
+		wait(selector.activity_welcome_logo()).isDisplayed();
+		wait(selector.activity_welcome_tagline()).isDisplayed();
+		wait(selector.activity_welcome_facebook_signup()).isDisplayed();
+		wait(selector.activity_welcome_email_signup()).isDisplayed();
+		wait(selector.activity_welcome_have_account()).isDisplayed();
+		
+	}
+
+	public void forgetPassword() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void signOut() {
+		wait(for_find("Main View"));
+		wait(for_find("Navigate up")).click();
+		wait(for_find("com.smartpettech.link.debug:id/widget_main_navigation_header_dog_profile_photo"));
+		wait(for_find("Settings")).click();
+		sleepTime(1000);
+		wait(for_find("Sign out")).click();
+		
+	}
+
+	public void successfulSignout() {
 		wait(selector.activity_welcome_logo()).isDisplayed();
 		wait(selector.activity_welcome_tagline()).isDisplayed();
 		wait(selector.activity_welcome_facebook_signup()).isDisplayed();

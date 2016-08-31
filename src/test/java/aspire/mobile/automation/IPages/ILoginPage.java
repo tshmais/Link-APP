@@ -57,6 +57,12 @@ public interface ILoginPage {
 
 	void welcomeView();
 
+	void forgetPassword();
+
+	void signOut();
+
+	void successfulSignout();
+
 
 	
 	

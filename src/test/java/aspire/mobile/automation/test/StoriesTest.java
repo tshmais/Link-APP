@@ -140,14 +140,32 @@ public class StoriesTest extends JUnitStories {
 		if (buildName == null) {
 			buildName = "";
 		}
-		String defaultOutputFileName = "report-" + buildName + "-"+ ft.format(date) + ".html";
-		AspireReport.getInstance().getReportDataManager().setReportFileName(defaultOutputFileName);
+		
+
+    	String environment = "";
+		if (TargetPlatform.platformName.equals("Android")) {
+			environment = "Link APP - Android";
+		} else {
+			environment = "Link APP - iOS";
+		}
+		
+		String dateAndTime = ft.format(date);
+		String dateAndTime1 = ft.format(date);
+		dateAndTime = dateAndTime.replace(",,", " ");
+		dateAndTime1 = dateAndTime1.replace(",,", ":");
+		
+		String ReportName = System.getProperty("Report_Name");
+		  if (ReportName == null) {
+		   ReportName = "Link API Automation Report " + dateAndTime + " " +"(BuildNumber " + buildName + ")" + ".html";
+		  }
+		
+		AspireReport.getInstance().getReportDataManager().setReportFileName(ReportName);
 		if(Integer.parseInt(EnvirommentManager.getInstance().getProperty("threads")) > 1){
 			AspireReport.getInstance().getReportDataManager().setThreading(true);
 		}
-		AspireReport.getInstance().getReportDataManager().setReportTitle("AKC Link");
+		AspireReport.getInstance().getReportDataManager().setReportTitle("Link APP");
 		AspireReport.getInstance().getReportDataManager().setReportSubTitle("testing report");
-		AspireReport.getInstance().getReportDataManager().setTitle("AKC Link "+TargetPlatform.platformName+" Automation");
+		AspireReport.getInstance().getReportDataManager().setTitle(environment+" Automation");
 		AspireReport.getInstance().getReportDataManager().setRunningMobile(true);
 		AspireReport.getInstance().getReportDataManager().setPlatformName(TargetPlatform.platformName);
 		AspireReport.getInstance().getReportDataManager().setDeviceName(TargetPlatform.deviceName);
@@ -348,7 +366,6 @@ public class StoriesTest extends JUnitStories {
 	            try {
 	                rest.uploadFile(newFile, localApp);
 	            } catch (IOException e) {
-	                // TODO Auto-generated catch block
 	                e.printStackTrace();
 	            }
 	            System.out.println("********** Uploading apk file has completed *********");
@@ -421,6 +438,8 @@ public class StoriesTest extends JUnitStories {
 
 
 }
+
+
 
 
 

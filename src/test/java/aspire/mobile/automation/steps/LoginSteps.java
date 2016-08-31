@@ -1,19 +1,31 @@
 package aspire.mobile.automation.steps;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import jo.aspire.generic.EnvirommentManager;
 import jo.aspire.mobile.automationUtil.DriverProvider;
 
+import org.hamcrest.Matchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+
+import static org.junit.Assert.assertThat;
+import aspire.mobile.util.MysqlConnector;
 
 
 
 
 
 public class LoginSteps extends BaseSteps {
-
+	MysqlConnector dbConn = new MysqlConnector();
+	 public List<String> dataList = new ArrayList<String>();
+	 String response2;
 	public LoginSteps(DriverProvider driverPorvider) throws Exception {
+		
 		super(driverPorvider);
 	}
 
@@ -32,6 +44,26 @@ public class LoginSteps extends BaseSteps {
 		login.loginEmail();
 
 	}
+	
+	@Given("I want to open a connection to MySQL DB")
+	 @When("I want to open a connection to MySQL DB")
+	 @Then("I want to open a connection to MySQL DB")
+	 public void connect2MySQL() throws ClassNotFoundException, SQLException {
+
+	  assertThat(dbConn.dbOpenConn(), Matchers.equalTo(true));
+	 }
+	
+	
+	@Then("I want to pull the data from the DB using $query query with $id")
+	 @When("I want to pull the data from the DB using $query query with $id")
+	 public void getDBDataRID(String query, String id) throws ClassNotFoundException,
+	   SQLException {
+	  String getQuery = String.format(EnvirommentManager.getInstance()
+	    .getProperty(query));
+	  getQuery = getQuery.replaceFirst("\\[parameter\\]", id);
+	  dataList = dbConn.ExecuteAPIQuery(getQuery);
+
+	 }
 	
 	@When("logins using valid username: <username> and valid password: <password>")
 	public void signInWithEmail(@Named("username") String username,
@@ -209,6 +241,23 @@ public class LoginSteps extends BaseSteps {
 	@Then("the Welcome view should display following options Sign up with Facebook, Sign up with Email, I already have an account")
 	public void welcomeView() {  
 		login.welcomeView();
+	}
+	
+	@Then("he wants to see I forget my password in login screen")
+	public void forgetPassword() {  
+		login.forgetPassword();
+	}
+	
+	@When("I am presented a menu option to Sign Out")
+	public void signOut() {
+		login.signOut();
+	 
+	}
+	
+	@Then("on Success, I am brought to the Welcome View upon successful sign out")
+	public void successfulSignout() {  
+		login.successfulSignout();
+
 	}
 	
 

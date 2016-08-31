@@ -1,5 +1,7 @@
 package aspire.mobile.automation.steps;
 
+import java.util.Random;
+
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -17,13 +19,17 @@ public class RegistrationSteps extends BaseSteps {
 		registration.signupEmail();
 	}
 	
-	@When("enter valid Name: <username> and valid email: <email> and valid password: <password>")
-	public void registerHisAccount(@Named("username") String username,@Named("email") String email,
-			@Named("password") String password) {
+	@When("enter valid Name: <username> and valid email and valid password: <password>")
+	public void registerHisAccount(@Named("username") String username, @Named("password") String password) {
+		
+		Random random = new Random();
+		int number = random.nextInt(10000);
+		String email = "testing" + number + "@hotmail.co";
+		
 		registration.signupUsingEmail(username, email, password);
 	}
 	
-	@When("tap creat account")
+	@When("tap create account")
 	public void createAccount() {
 		registration.createAccount();
 	}

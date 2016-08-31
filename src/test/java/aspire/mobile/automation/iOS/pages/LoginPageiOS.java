@@ -204,5 +204,20 @@ public class LoginPageiOS extends Helper implements ILoginPage {
 		
 	}
 
+	public void forgetPassword() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void signOut() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void successfulSignout() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
